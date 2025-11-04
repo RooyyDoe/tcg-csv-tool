@@ -295,7 +295,6 @@ function generateCsv() {
       }
     });
   });
-
   const csv = Papa.unparse(output);
   const blob = new Blob([csv], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
@@ -303,6 +302,14 @@ function generateCsv() {
   a.href = url;
   a.download = "powerTools_upload.csv";
   a.click();
+  // Reset all fields and selection after generating CSV
+  selection.splice(0, selection.length);
+  collectorNumber.value = "";
+  quantity.value = 1;
+  selectedCondition.value = "NM";
+  selectedLanguage.value = "English";
+  isFoil.value = false;
+  isHolo.value = false;
 }
 </script>
 
