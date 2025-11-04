@@ -126,7 +126,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, watch, onMounted } from "vue";
 import Papa from "papaparse";
 
 const catalog = ref([]);
@@ -168,6 +168,7 @@ function deleteCard(expansionCode, collectorNumber) {
   // Remove the set if it's empty
   if (set.cards.length === 0) {
     selection.splice(setIndex, 1);
+    localStorage.setItem("tcgSelection", JSON.stringify(selection));
   }
 }
 
@@ -304,6 +305,7 @@ function generateCsv() {
   a.click();
   // Reset all fields and selection after generating CSV
   selection.splice(0, selection.length);
+  localStorage.removeItem("tcgSelection");
   collectorNumber.value = "";
   quantity.value = 1;
   selectedCondition.value = "NM";
@@ -311,6 +313,28 @@ function generateCsv() {
   isFoil.value = false;
   isHolo.value = false;
 }
+
+// Persist selection to localStorage whenever it changes
+watch(
+  selection,
+  (newVal) => {
+    localStorage.setItem("tcgSelection", JSON.stringify(newVal));
+  },
+  { deep: true }
+);
+
+// Restore selection from localStorage on app load
+onMounted(() => {
+  const saved = localStorage.getItem("tcgSelection");
+  if (saved) {
+    try {
+      const arr = JSON.parse(saved);
+      selection.splice(0, selection.length, ...arr);
+    } catch (e) {
+      // Ignore parse errors
+    }
+  }
+});
 </script>
 
 <style scoped>
