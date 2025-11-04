@@ -69,6 +69,9 @@
           <v-col cols="6">
             <v-switch v-model="isFoil" color="primary" label="isFoil" />
           </v-col>
+          <v-col cols="6">
+            <v-switch v-model="isHolo" color="primary" label="HOLO" />
+          </v-col>
         </v-row>
 
         <v-btn
@@ -135,6 +138,7 @@ const collectorNumber = ref("");
 const quantity = ref(1);
 const selection = reactive([]);
 const isFoil = ref(false);
+const isHolo = ref(false);
 const collectorNumberRef = ref(null);
 
 const headers = [
@@ -217,7 +221,8 @@ function addCard() {
         normalizeCollectorNumber(collectorNumber.value) &&
       c.condition === selectedCondition.value &&
       c.language === selectedLanguage.value &&
-      c.isFoil === isFoil.value
+      c.isFoil === isFoil.value &&
+      c.comment === (isHolo.value ? "HOLO" : undefined)
   );
 
   if (existingCard) {
@@ -231,6 +236,7 @@ function addCard() {
       condition: selectedCondition.value,
       language: selectedLanguage.value,
       isFoil: isFoil.value,
+      comment: isHolo.value ? "HOLO" : undefined,
     });
   }
 
@@ -239,6 +245,7 @@ function addCard() {
   selectedCondition.value = "NM";
   selectedLanguage.value = "English";
   isFoil.value = false;
+  isHolo.value = false;
 }
 
 function handleAddCard() {
@@ -283,6 +290,7 @@ function generateCsv() {
           price: 0.1,
           quantity: card.quantity,
           isFoil: card.isFoil,
+          comment: card.comment,
         });
       }
     });
