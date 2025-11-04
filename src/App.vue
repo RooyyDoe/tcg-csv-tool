@@ -209,13 +209,31 @@ function addCard() {
     set = { expansionCode: selectedExpansion.value, cards: [] };
     selection.push(set);
   }
-  set.cards.push({
-    collectorNumber: collectorNumber.value,
-    quantity: quantity.value,
-    condition: selectedCondition.value,
-    language: selectedLanguage.value,
-    isFoil: isFoil.value,
-  });
+
+  // Check for existing card with same properties
+  const existingCard = set.cards.find(
+    (c) =>
+      normalizeCollectorNumber(c.collectorNumber) ===
+        normalizeCollectorNumber(collectorNumber.value) &&
+      c.condition === selectedCondition.value &&
+      c.language === selectedLanguage.value &&
+      c.isFoil === isFoil.value
+  );
+
+  if (existingCard) {
+    // If card exists, increase quantity
+    existingCard.quantity += quantity.value;
+  } else {
+    // If card doesn't exist, add new card
+    set.cards.push({
+      collectorNumber: collectorNumber.value,
+      quantity: quantity.value,
+      condition: selectedCondition.value,
+      language: selectedLanguage.value,
+      isFoil: isFoil.value,
+    });
+  }
+
   collectorNumber.value = "";
   quantity.value = 1;
   selectedCondition.value = "NM";
