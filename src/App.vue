@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container class="py-8" max-width="800">
+    <v-container class="py-8" max-width="900">
       <v-card elevation="3" class="pa-5">
         <v-card-title class="text-h5 mb-4"
           >📦 TCG PowerTools CSV Generator</v-card-title
@@ -59,6 +59,8 @@
                 'Spanish',
                 'Italian',
                 'Portuguese',
+                'Japans',
+                'Chinees',
               ]"
               label="Selecteer taal"
             ></v-select>
@@ -67,14 +69,19 @@
 
         <v-row class="mt-2">
           <v-col cols="6">
-            <v-switch v-model="isFoil" color="primary" label="isFoil" />
+            <v-switch
+              v-model="isReverse"
+              color="primary"
+              label="isReverse"
+              :disabled="isHolo"
+            />
           </v-col>
           <v-col cols="6">
             <v-switch
               v-model="isHolo"
               color="primary"
               label="isHolo"
-              :disabled="!isFoil"
+              :disabled="isReverse"
             />
           </v-col>
         </v-row>
@@ -142,7 +149,7 @@ const selectedCondition = ref("NM");
 const collectorNumber = ref("");
 const quantity = ref(1);
 const selection = reactive([]);
-const isFoil = ref(false);
+const isReverse = ref(false);
 const isHolo = ref(false);
 const collectorNumberRef = ref(null);
 
@@ -152,7 +159,8 @@ const headers = [
   { title: "Aantal", key: "quantity" },
   { title: "Conditie", key: "condition" },
   { title: "Taal", key: "language" },
-  { title: "isFoil", key: "isFoil" },
+  { title: "isReverse", key: "isReverse" },
+  { title: "isHolo", key: "isHolo" },
   { title: "Acties", key: "actions", sortable: false },
 ];
 
@@ -185,7 +193,8 @@ const selectionFlat = computed(() =>
       quantity: c.quantity,
       condition: c.condition,
       language: c.language,
-      isFoil: c.isFoil,
+      isReverse: c.isReverse,
+      isHolo: c.isHolo,
     }))
   )
 );
@@ -227,7 +236,7 @@ function addCard() {
         normalizeCollectorNumber(collectorNumber.value) &&
       c.condition === selectedCondition.value &&
       c.language === selectedLanguage.value &&
-      c.isFoil === isFoil.value &&
+      c.isReverse === isReverse.value &&
       c.comment === (isHolo.value ? "Normal Holo Card ✨" : undefined)
   );
 
@@ -241,7 +250,7 @@ function addCard() {
       quantity: quantity.value,
       condition: selectedCondition.value,
       language: selectedLanguage.value,
-      isFoil: isFoil.value,
+      isReverse: isReverse.value,
       isHolo: isHolo.value,
       comment: isHolo.value ? "Normal Holo Card ✨" : undefined,
     });
@@ -251,7 +260,7 @@ function addCard() {
   quantity.value = 1;
   selectedCondition.value = "NM";
   selectedLanguage.value = "English";
-  isFoil.value = false;
+  isReverse.value = false;
   isHolo.value = false;
 }
 
@@ -296,8 +305,7 @@ function generateCsv() {
           condition: card.condition,
           price: 0.1,
           quantity: card.quantity,
-          foil: card.isFoil,
-          isReverseHolo: card.isFoil && !card.isHolo,
+          isReverseHolo: card.isReverse,
           comment: card.comment,
         });
       }
@@ -317,7 +325,7 @@ function generateCsv() {
   quantity.value = 1;
   selectedCondition.value = "NM";
   selectedLanguage.value = "English";
-  isFoil.value = false;
+  isReverse.value = false;
   isHolo.value = false;
 }
 
@@ -346,6 +354,6 @@ onMounted(() => {
 
 <style scoped>
 .v-container {
-  max-width: 800px;
+  max-width: 900px;
 }
 </style>
