@@ -228,7 +228,7 @@ function addCard() {
       c.condition === selectedCondition.value &&
       c.language === selectedLanguage.value &&
       c.isFoil === isFoil.value &&
-      c.comment === (isHolo.value ? "HOLO" : undefined)
+      c.comment === (isHolo.value ? "Normal Holo Card ✨" : undefined)
   );
 
   if (existingCard) {
