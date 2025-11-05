@@ -228,7 +228,7 @@ function addCard() {
       c.condition === selectedCondition.value &&
       c.language === selectedLanguage.value &&
       c.isFoil === isFoil.value &&
-      c.comment === (isHolo.value ? "Normal Holo Card" : undefined)
+      c.comment === (isHolo.value ? "Normal Holo Card ✨" : undefined)
   );
 
   if (existingCard) {
@@ -243,7 +243,7 @@ function addCard() {
       language: selectedLanguage.value,
       isFoil: isFoil.value,
       isHolo: isHolo.value,
-      comment: isHolo.value ? "Normal Holo Card" : undefined,
+      comment: isHolo.value ? "Normal Holo Card ✨" : undefined,
     });
   }
 
