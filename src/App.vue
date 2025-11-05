@@ -243,7 +243,7 @@ function addCard() {
       language: selectedLanguage.value,
       isFoil: isFoil.value,
       isHolo: isHolo.value,
-      comment: isHolo.value ? "HOLO" : undefined,
+      comment: isHolo.value ? "Normal Holo Card ✨" : undefined,
     });
   }
 
