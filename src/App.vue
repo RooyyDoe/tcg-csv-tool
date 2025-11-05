@@ -70,7 +70,12 @@
             <v-switch v-model="isFoil" color="primary" label="isFoil" />
           </v-col>
           <v-col cols="6">
-            <v-switch v-model="isHolo" color="primary" label="HOLO" />
+            <v-switch
+              v-model="isHolo"
+              color="primary"
+              label="isHolo"
+              :disabled="!isFoil"
+            />
           </v-col>
         </v-row>
 
@@ -237,6 +242,7 @@ function addCard() {
       condition: selectedCondition.value,
       language: selectedLanguage.value,
       isFoil: isFoil.value,
+      isHolo: isHolo.value,
       comment: isHolo.value ? "HOLO" : undefined,
     });
   }
@@ -290,7 +296,8 @@ function generateCsv() {
           condition: card.condition,
           price: 0.1,
           quantity: card.quantity,
-          isFoil: card.isFoil,
+          foil: card.isFoil,
+          isReverseHolo: card.isFoil && !card.isHolo,
           comment: card.comment,
         });
       }
